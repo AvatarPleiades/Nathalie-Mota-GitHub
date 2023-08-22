@@ -1,0 +1,73 @@
+.container-lightbox{
+    position: fixed;
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    top:0;
+    left:0;
+    background-color:rgba(0, 0, 0, 1) ;
+    z-index: 20;
+}
+
+.fullscreen-photo{
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.fullscreen-photo h5{
+    position: absolute;
+    left: 0px;
+    bottom: 20px;
+    font-family:'Space Mono';
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.fullscreen-photo h6{
+    position: absolute;
+    right: 0px;
+    bottom: 20px;
+    font-family:'Space Mono';
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.img-fullscreen{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.close-fullscreen{
+    position: absolute;
+    right: 4.5vw;
+    top: 4vw;
+    cursor: pointer;
+}
+
+.fullscreen-photo .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    z-index: 20;
+    transition: opacity 0.2s;
+}
+
+.fullscreen-photo .left-arrow {
+    left: 20px;
+}
+
+.fullscreen-photo .right-arrow {
+    right: 20px;
+}
