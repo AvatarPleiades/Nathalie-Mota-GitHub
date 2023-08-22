@@ -50,4 +50,36 @@
         wp_reset_postdata();
         ?>
 
+<div class="container-front-page">
+
+    <section class="img-gallery">
+    <?php
+    $tri = isset($_POST['annee']) ? $_POST['annee'] : 'ASC';
+
+    if ($tri === 'DESC') {
+        $order = 'DESC';
+    } else {
+        $order = 'ASC';
+    }
+
+    $photoAccueil = array(
+        'post_type' => 'photo',
+        'orderby' => 'date',
+        'order' => $order,
+        'posts_per_page' => 12,
+    );
+
+    $query_photoAccueil = new WP_Query($photoAccueil);
+    if ($query_photoAccueil->have_posts()) : while ($query_photoAccueil->have_posts()) : $query_photoAccueil->the_post(); ?>
+        <div class="container-gallery">
+            <?php get_template_part('/templates-part/photo-block'); ?>
+        </div>
+    <?php endwhile;
+    endif;
+    wp_reset_postdata();
+    ?>
+</section>
+
+</div>
+
 <?php get_footer() ?>
