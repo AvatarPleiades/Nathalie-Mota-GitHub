@@ -1,0 +1,31 @@
+footer{
+    width: 100%;
+    height: auto;
+}
+
+footer ul{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #000000;
+}
+  
+footer li{
+    padding: 0.9em 2.9em;
+    list-style: none;
+}
+  
+footer li a{
+    text-decoration: none;
+    font-family: 'space-mono';
+    font-size: 16px;
+    color: #000000; 
+}
+
+footer li a:hover{
+    font-weight: bold;
+}
+
+.menu-item-24{
+    pointer-events: none;
+}
