@@ -80,6 +80,9 @@
     ?>
 </section>
 
+    <div class="container-more">
+        <button class='button-more' type="button">Charger plus</button> 
+    </div>
 </div>
 
 <?php get_footer() ?>

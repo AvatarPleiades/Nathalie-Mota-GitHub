@@ -33,4 +33,25 @@ $('.contact-link').click(function(){
     $('input[name="ref"]').val($reference);
 });
 
+// Script du bouton "Chargez plus" \\
+let currentPage = 1;
+
+$('.button-more').on('click', function(){
+    currentPage++;
+
+    $.ajax({
+        type: 'POST',
+        url: '/nathalie-mota-photographe/wp-admin/admin-ajax.php',
+        dataType:'html',
+        data: {
+            action: 'more',
+            paged: currentPage,
+        },
+        success:function (resultat){
+            $('.img-gallery').append(resultat);
+        }
+    });
+});
+
+
 });
