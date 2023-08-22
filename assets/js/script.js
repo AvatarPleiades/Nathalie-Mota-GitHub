@@ -33,4 +33,47 @@ $('.contact-link').click(function(){
     $('input[name="ref"]').val($reference);
 });
 
+// Script du bouton "Chargez plus" \\
+let currentPage = 1;
+
+$('.button-more').on('click', function(){
+    currentPage++;
+
+    $.ajax({
+        type: 'POST',
+        url: '/nathalie-mota-photographe/wp-admin/admin-ajax.php',
+        dataType:'html',
+        data: {
+            action: 'more',
+            paged: currentPage,
+        },
+        success:function (resultat){
+            $('.img-gallery').append(resultat);
+        }
+    });
+});
+
+// Script des filtres \\
+$(".select-filter").on("change", function () {
+    const annee = $('#select-date').val(); // Récupère la valeur du select trier par
+    const cat = $('#select-category').val(); // Récupère la valeur du select catégorie
+    const form = $('#select-format').val(); // Récupère la valeur du select format
+
+    // Appel AJAX pour mettre à jour la galerie avec les filtres sélectionnés
+    $.ajax({
+        type: "POST",
+        url: "/nathalie-mota-photographe/wp-admin/admin-ajax.php",
+        dataType: "html",
+        data: {
+            action: 'filter',
+            cat: cat,
+            form: form,
+            annee: annee,
+        },
+        success: function (resultat) {
+            $(".img-gallery").html(resultat);
+        },
+    });
+});
+
 });
