@@ -68,3 +68,70 @@ function more() {
 
 add_action('wp_ajax_more', 'more');
 add_action('wp_ajax_nopriv_more', 'more');
+
+// Fonction des filtres Catégories, Formats et Trier par
+
+function filter() {
+    $tri = isset($_POST['annee']) ? $_POST['annee'] : 'ASC';
+
+    if ($tri === 'DESC') {
+        $order = 'DESC';
+    } else {
+        $order = 'ASC';
+    }
+
+    $args = array(
+        'post_type' => 'photo',
+        'orderby' => 'date',
+        'order' => $order,
+    );
+
+    // Si la valeur de catégorie est différente de "all"
+    if ($_POST['cat'] !== 'all') {
+        $args['tax_query'][] = array(
+            'taxonomy' => 'categorie',
+            'field' => 'slug',
+            'terms' => $_POST['cat'],
+        );
+    }
+
+    // Si la valeur de format est différente de "all"
+    if ($_POST['form'] !== 'all') {
+        $args['tax_query'][] = array(
+            'taxonomy' => 'format',
+            'field' => 'slug',
+            'terms' => $_POST['form'],
+        );
+    }
+
+    $query_requete_Ajax = new WP_Query($args);
+
+    $return = '';
+
+    if ($query_requete_Ajax->have_posts()) :
+        while ($query_requete_Ajax->have_posts()) : $query_requete_Ajax->the_post();
+            $return .=
+                '<div class="container-gallery">
+                    <img class="photo" src="' . get_the_post_thumbnail_url(get_the_ID(), "full") . '" alt="' . get_the_title() . '">
+                    <div class="hover-img">
+                        <img class="icon-fullscreen icon-lightbox" src="' . get_template_directory_uri() . '/assets/images/fullscreen.svg" alt="icône plein écran">
+                        <a href="' . get_permalink() . '"><img class="hover-eye" src="' . get_template_directory_uri() . '/assets/images/eye.svg" alt="icône oeil"> </a>
+                        <h2 class="reference">' . get_field('reference') . '</h2>
+                        <h3 class="categorie">' . get_the_terms(get_the_ID(), 'categorie')[0]->name . '</h3>
+                    </div>
+                </div>';
+        endwhile;
+        wp_reset_postdata();
+    else :
+        $return = 'Il n\'y a pas de résultats pour cette recherche.';
+    endif;
+
+    echo $return;
+
+    exit;
+}
+
+add_action('wp_ajax_filter', 'filter');
+add_action('wp_ajax_nopriv_filter', 'filter');
+
+?>

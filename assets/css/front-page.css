@@ -26,6 +26,56 @@
     text-transform: uppercase;
 }
 
+/* Les filtres */
+.container-front-page{
+    width: 100vw;
+    height: auto;
+    padding: 5vh 9.8vw 2.26vh 9.8vw;
+}
+
+.filter{
+    display: flex;
+    width: 100%;
+    height: auto;
+}
+
+.filter p{
+    font-family:'poppins';
+}
+
+.category-filter{
+    padding-right: 14.27vw;
+}
+
+.form-filter{
+    margin-left: 2.81vw;
+}
+
+.date-filter{
+    margin-left: 29.48vw;
+}
+
+select{
+    font-size: 12px;
+    font-family: 'poppins';
+    padding: 11px 18px;
+    border-radius: 8px 8px 8px 8px;
+}
+select option{
+    font-size: 12px;
+    font-family: 'poppins';
+}
+
+select:focus{
+    border: 1.3px solid var(--blues-blue-cta, #215AFF);
+    border-radius: 8px 8px 0px 0px;
+}
+
+select option:checked {
+    background-color: #FE5858;
+    color: #ffffff;
+  }
+
 /* Galerie Photos */
 
 .img-gallery{

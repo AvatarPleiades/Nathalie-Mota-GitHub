@@ -51,6 +51,49 @@
         ?>
 
 <div class="container-front-page">
+    <section class="filter">
+        <div class="category-filter"> 
+            <p>CATÉGORIES</p>
+            <select name="categorie" id="select-category" class="select-filter">
+            <?php 
+                $categorie_taxonomie = get_terms( array(
+                    'taxonomy' => 'categorie',
+                    'hide_empty' => true,
+                ) );
+                if ( ! empty($categorie_taxonomie) && ! is_wp_error ($categorie_taxonomie) ) {
+                    echo '<option value="all">Toutes les catégories</option>';
+                    foreach ($categorie_taxonomie as $iteration_categorie) {
+                        echo '<option class="option" value="'.$iteration_categorie->name.'"> ' .  $iteration_categorie->name  . '</option>';
+                    }
+                }
+            ?>
+            </select>
+        </div>
+        <div class="form-filter"> 
+            <p>FORMATS</p>
+            <select name="format" id="select-format" class="select-filter">
+            <?php 
+                $format_taxonomie = get_terms( array(
+                    'taxonomy' => 'format',
+                    'hide_empty' => true,
+                ) );
+                if ( ! empty ($format_taxonomie) && ! is_wp_error($format_taxonomie) ) {
+                    echo '<option value="all">Tous les formats</option>';
+                    foreach ($format_taxonomie as $iteration_format) {
+                        echo '<option value="'.$iteration_format->name.'"> ' . $iteration_format->name . '</option>';
+                    }
+                }
+            ?>
+            </select>
+        </div>
+        <div class="date-filter">
+            <p>TRIER PAR</p>
+            <select name="annee" id="select-date" class="select-filter">
+                <option value="ASC">Les plus anciennes</option>
+                <option value="DESC">Les plus récentes</option>
+            </select>
+        </div>
+    </section>
 
     <section class="img-gallery">
     <?php
