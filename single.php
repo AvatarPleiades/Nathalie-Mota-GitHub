@@ -1,50 +1,128 @@
-<?php
+<?php 
+
 /**
- * The template for displaying all single posts
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
+ * Template Name: Template Single
  *
  * @package WordPress
- * @subpackage Twenty_Twenty_One
- * @since Twenty Twenty-One 1.0
- */
+ * @subpackage Nathalie Mota Photographe Event
+ **/
 
-get_header();
+get_header() ?>
 
-/* Start the Loop */
-while ( have_posts() ) :
-	the_post();
+<?php 
+// Champs ACF
+    $titre = get_field('nom'); 
+    $type = get_field('type');
+    $annee = get_field('annee');
+	$photo_url = get_field('photo');
+    $reference = get_field('reference'); 
+    $categorie = get_field('categorie'); 
+    $format = get_field('format');
 
-	get_template_part( 'template-parts/content/content-single' );
+// Champs de Taxonomies
+    $taxo_categorie = get_the_terms(get_the_ID(), 'categorie'); 
+    $taxo_format = get_the_terms(get_the_ID(), 'format'); 
+	$taxo_annee = get_the_terms(get_the_ID(), 'annee'); 
+	
+//Récupération de l'id et de l'url	
+	$id = get_the_ID();
+    $url = get_permalink();
 
-	if ( is_attachment() ) {
-		// Parent post navigation.
-		the_post_navigation(
-			array(
-				/* translators: %s: Parent post link. */
-				'prev_text' => sprintf( __( '<span class="meta-nav">Published in</span><span class="post-title">%s</span>', 'twentytwentyone' ), '%title' ),
-			)
-		);
-	}
+//Flèches précédent et suivant
+	$nextPost = get_next_post();
+    $previousPost = get_previous_post();
+?>
 
-	// If comments are open or there is at least one comment, load up the comment template.
-	if ( comments_open() || get_comments_number() ) {
-		comments_template();
-	}
+<?php if( have_posts() ) : while( have_posts() ) : the_post(); ?>
 
-	// Previous/next post navigation.
-	$twentytwentyone_next = is_rtl() ? twenty_twenty_one_get_icon_svg( 'ui', 'arrow_left' ) : twenty_twenty_one_get_icon_svg( 'ui', 'arrow_right' );
-	$twentytwentyone_prev = is_rtl() ? twenty_twenty_one_get_icon_svg( 'ui', 'arrow_right' ) : twenty_twenty_one_get_icon_svg( 'ui', 'arrow_left' );
+<div class="container-simple">
+    <div  class="informations-photo">
+      	<div class="informations"> 
+			<h1><?php  echo get_the_title(get_post_thumbnail_id()) ?></h1>
+			<p> RÉFÉRENCE :  <span class="reference-photo"><?php echo $reference ?></span></p>
+			<p> CATÉGORIE :  <?php echo $taxo_categorie[0]->name ?></p>
+			<p> FORMAT :     <?php echo $taxo_format[0]->name ?></p>
+			<p> TYPE :       <?php echo $type ?>   </p>
+			<p> ANNÉE :      <?php echo $taxo_annee[0]->name ?></p>
+			
+		</div>
+		<div class="affichage-photo">
+			<img class ="single-photo"  src="<?php echo $photo_url ?>" alt="<?php the_title_attribute(); ?>">
+			<div class="hover-img">
+				<img class="hover-fullscreen icon-lightbox" src="<?php echo get_template_directory_uri() .'/assets/images/fullscreen.svg';?>" alt="Icône d'affiche en plein écran"> 
+			</div>
+		</div>
+	</div>
+	<div class="contact-menu">
+		<div class="container-contact">
+			<p> Cette photo vous intéresse ? </p>
+			<button type="button" class="button-contact contact-link">Contact</button>
+		</div>
+		<div class="container-arrows"> 
+			<?php 
+				$args = array( 
+					'post_type' => 'photo',
+					'posts_per_page' => 2,
+				);
+			?>
+				<div class="navigation-arrows">
 
-	$twentytwentyone_next_label     = esc_html__( 'Next post', 'twentytwentyone' );
-	$twentytwentyone_previous_label = esc_html__( 'Previous post', 'twentytwentyone' );
+					<?php if (!empty($previousPost)){ ?>
+						<div class="container-image-arrows"> 
+							<?php echo get_the_post_thumbnail ($previousPost->ID, 'thumbnail', ['class'=>"img-arrows"])?>
+						</div>
+						<a href="<?php echo get_permalink($previousPost->ID) ?>"><img class="arrow" src="<?php echo get_template_directory_uri() .'/assets/images/arrow_left.svg';?>" alt="Flèche précédent"></a>
+					<?php } ?>
 
-	the_post_navigation(
-		array(
-			'next_text' => '<p class="meta-nav">' . $twentytwentyone_next_label . $twentytwentyone_next . '</p><p class="post-title">%title</p>',
-			'prev_text' => '<p class="meta-nav">' . $twentytwentyone_prev . $twentytwentyone_previous_label . '</p><p class="post-title">%title</p>',
-		)
-	);
-endwhile; // End of the loop.
+					<?php if (!empty($nextPost)){ ?>   
+						<a href="<?php echo get_permalink($nextPost->ID) ?>"><img class="arrow" src="<?php echo get_template_directory_uri() .'/assets/images/arrow_right.svg';?>" alt="Flèche suivant"></a>   
+					<?php } ?>
+				</div>
+		</div>
+	</div>
+	
+	<h2> VOUS AIMEREZ AUSSI</h2>
 
-get_footer();
+	<div class="container-similar-img">
+    <?php
+    $imageSimilaire = array(
+        'post_type' => 'photo',
+        'posts_per_page' => 2,
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'categorie',
+                'field' => 'term_id',
+                'terms' => $taxo_categorie[0]->term_id,
+            ),
+        ),
+        'post__not_in' => array($id),
+        'orderby' => 'rand',
+    );
+
+    $query = new WP_Query($imageSimilaire);
+
+    if ($query->have_posts()) : while ($query->have_posts()) : $query->the_post();
+    ?>
+				
+		<div class ="container-similar-photo" >
+			<?php get_template_part('/templates-part/photo-block'); ?>
+		</div>
+				
+		<?php endwhile;
+		else :
+			$response = 'Il n\'y a pas de photos similaires dans cette catégorie.';
+			echo $response;
+		endif;
+		wp_reset_postdata();
+		?>
+	
+	</div>
+	
+	<div class="container-all">
+		<button class="button-single" type="button" onclick="window.location.href='<?php echo home_url(); ?>'"> Toutes les photos </button> 
+	</div>
+</div>
+
+<?php endwhile; endif ?> 
+
+<?php get_footer() ?>
