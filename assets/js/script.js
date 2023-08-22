@@ -33,6 +33,15 @@ $('.contact-link').click(function(){
     $('input[name="ref"]').val($reference);
 });
 
+
+// Script du Menu Burger \\
+
+$('.burger').click(function(){
+    $('nav').toggleClass('active');
+    $(this).toggleClass('open');
+});
+
+
 // Script du bouton "Chargez plus" \\
 let currentPage = 1;
 
